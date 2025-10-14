@@ -1,0 +1,6 @@
+<div class="contaier" *ngIf="visible">
+  <div class="result-wrapper"  [ngClass]="{'mobile':utils.isMobile()}">
+    <div class="rate-lbl">{{rate}}x</div>
+    <div class="amount-lbl">{{userData.currencySign}}{{amount | kAmount: '9999/1.0-2'}}</div>
+  </div>
+</div>

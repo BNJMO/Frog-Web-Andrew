@@ -1,0 +1,38 @@
+<div class="lane-wrapper" [ngClass]="{'mobile': isMobile}">
+    <div class="lane">
+        <div class="car car_{{carId}}" [@cAnim]="animateCar ? (showBarrier ? 'stop': 'down') : 'up'"></div>
+        <div class="barrier-stop d_{{difficultyLevelId}}" *ngIf="showBarrier" [ngClass]="{broken:hitBarrier}"></div>
+        <div class="manhole-wrapper" [ngClass]="{fallen:fall, fried:fried, 'hole-flame':falmeInHole, disabled: !allowJump}" (click)="jump()">
+            <div class="hole"><app-flame></app-flame></div>
+            <div class="manhole" [ngClass]="{passed:id<posId}"></div>
+            <div class="frog-wrap" id="lane_{{id}}"></div>
+        </div>
+        <div class="rate-wrapper" (click)="rateClick(id)">
+            <div class="rate-lbl d_{{difficultyLevelId}}"
+                [ngClass]="{'win': showBarrier, 'current': posId == id, 'lost': posId == id && !showBarrier}">{{rate |
+                number:'1.1-2'}}x</div>
+            <div class="tooltip">
+                <div class="t-col">
+                    <div class="profit">
+                        <label>{{"Total of win" | translate }}<span
+                                style="float:right;">${{getUsdTotalProfit() | kAmount:
+                                '9999/1.0-2'}}</span></label>
+                        <div class="profit-value">
+                            {{getTotalProfit() | kAmount: '9999/1.0-2'}} <span
+                                class="suffix">{{userData.currencySign}}</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="t-col">
+                    <div class="profit">
+                        <label>{{"Chance" | translate }}</label>
+                        <div class="profit-value">
+                            {{getWinChange() | kAmount: '9999/1.0-2'}} <span class="posfix">%</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="road_line"></div>
+</div>

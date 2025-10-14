@@ -1,0 +1,56 @@
+@font-face {
+    font-family: 'Figtree';
+    font-style: normal;
+    src: url('assets/fonts/Figtree/static/Figtree-Regular.ttf');
+}
+
+@font-face {
+    font-family: 'Figtree';
+    font-style: normal;
+    font-weight: 600;
+    src: url('assets/fonts/Figtree/static/Figtree-Bold.ttf');
+}
+
+body {
+    background-color: black;
+    padding: 0;
+    margin: 0;
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: 0 -40px;
+    background-blend-mode: lighten;
+    font-family: 'Figtree';
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    top: 0;
+}
+
+.arrow-ico {
+    background: url(data:image/svg+xml;base64,PHN2ZyBkYXRhLWRzLWljb249IkNoZXZyb25Eb3duIiB3aWR0aD0iMjAiIGhlaWdodD0iMjAiIHZpZXdCb3g9IjAgMCAyNCAyNCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiBmaWxsPSJub25lIiBjbGFzcz0iaW5saW5lLWJsb2NrIHNocmluay0wIj48IS0tLS0+PHBhdGggZmlsbD0iY3VycmVudENvbG9yIiBkPSJNMTcuMjkzIDguMjkzYTEgMSAwIDEgMSAxLjQxNCAxLjQxNGwtNiA2YTEgMSAwIDAgMS0xLjQxNCAwbC02LTYtLjA2OC0uMDc2QTEgMSAwIDAgMSA2LjYzIDguMjI1bC4wNzYuMDY4TDEyIDEzLjU4NnoiPjwvcGF0aD48L3N2Zz4=);
+    background-size: contain;
+    background-repeat: no-repeat;
+}
+
+.frog {
+    background: url('assets/img/frog_01.svg');
+    background-size: contain;
+    background-repeat: no-repeat;
+}
+
+.lane {
+    app-frog {
+        position: absolute;
+        top: -1vw;
+        left: 0.5vw;
+        z-index: 3;
+    }
+}
+.lanes{
+    app-lane:last-child {
+       .buoy {
+           display: none;
+       } 
+     }
+}

@@ -1,0 +1,8 @@
+<span *ngIf="tLeft > 0; else stub" class="timer">
+    {{tLeft | number: '2.00-00'}}
+</span>
+<ng-template #stub>
+    <span *ngIf="endStub" class="timer">
+    {{endStub}}
+    </span>
+</ng-template>

@@ -1,0 +1,10 @@
+<div class="app-wrapper">
+    <div class="container-mobile" [ngClass]="{keyboard:gameService.keyboardActive}">
+        <ng-container *ngIf="isMobile; else desktop">
+            <app-game-mobile></app-game-mobile>
+        </ng-container>
+        <ng-template #desktop>
+            <app-game-desktop></app-game-desktop>
+        </ng-template>
+    </div>
+</div>

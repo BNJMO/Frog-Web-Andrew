@@ -1,0 +1,4 @@
+<div class="toast-wrapper" *ngIf="visible"  [ngClass]="utils.isMobile()?'mobile:':'desktop'">
+  <div class="toast-ico {{type}}"></div>
+  <div class="toast-msg"> {{text | translate}}</div>
+</div>

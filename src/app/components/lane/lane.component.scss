@@ -1,0 +1,544 @@
+.lane-wrapper {
+    display: flex;
+    height: 100%;
+    position: relative;
+}
+
+.lane {
+    width: 12vw;
+    height: 100%;
+
+    .manhole-wrapper {
+        position: relative;
+        width: 7vw;
+        height: 5.1vw;
+        top: 29vw;
+        padding-top: 2vw;
+        left: 2.5vw;
+        overflow: hidden;
+        border-radius: 0 0 36% 36%;
+        cursor: pointer;
+
+        &.disabled {
+            cursor: not-allowed;
+            pointer-events: none;
+        }
+    }
+
+    .manhole {
+        position: absolute;
+        width: 7vw;
+        height: 5.7vw;
+        background: url('../../../assets/img/manhole_cover.svg');
+        background-size: contain;
+        background-repeat: no-repeat;
+        z-index: 1;
+        &.passed {
+            background: url('../../../assets/img/manhole-logo.svg');
+            background-size: contain;
+            background-repeat: no-repeat;
+            animation: spinFlip 0.5s linear;
+            transform-style: preserve-3d;
+        }
+    }
+
+    .hole {
+        position: absolute;
+        border-radius: 100%;
+        margin: 0.5vw 0.1vw;
+        width: 6.6vw;
+        height: 4.4vw;
+        background-color: black;
+        overflow: hidden;
+    }
+    app-flame{
+        width: 5vw;
+        height: 7vw;
+        left: 1vw;
+        display: block;
+        margin: 0 auto;
+        bottom: 1vw;
+        z-index: 1;
+        position: absolute;
+        display: none;
+    }
+    .hole-flame{
+        app-flame{
+            display: block;
+        }
+    }
+    .fallen {
+        .manhole {
+            animation: upDown 1.3s ease-in-out;
+        }
+
+        .frog-wrap {
+            animation: fall 0.5s ease-in forwards;
+            animation-delay: 0.5s;
+        }
+    }
+
+    .fried {
+        .manhole {
+            opacity: 0.9;
+        }
+        app-flame{
+            display: block;
+            z-index: 12;
+        }
+        .hole {
+            overflow: visible;
+        }
+    }
+}
+
+.barrier-stop {
+    position: absolute;
+    top: 26vw;
+    width: 100%;
+    height: 3.5vw;
+    z-index: 5;
+
+    &.d_0 {
+        background: url('../../../assets/img/easy_barrier.svg');
+    }
+
+    &.d_1 {
+        background: url('../../../assets/img/medium_barrier.svg');
+    }
+
+    &.d_2 {
+        background: url('../../../assets/img/hard_barrier.svg');
+    }
+
+    &.d_3 {
+        background: url('../../../assets/img/expert_barrier.svg');
+    }
+
+    &.broken {
+        &.d_0 {
+            background: url('../../../assets/img/easy_barrier_broken.svg');
+        }
+
+        &.d_1 {
+            background: url('../../../assets/img/medium_barrier_broken.svg');
+        }
+
+        &.d_2 {
+            background: url('../../../assets/img/hard_barrier_broken.svg');
+        }
+
+        &.d_3 {
+            background: url('../../../assets/img/expert_barrier_broken.svg');
+        }
+
+        &.d_0,
+        &.d_1,
+        &.d_2,
+        &.d_3 {
+            background-size: contain;
+            background-repeat: no-repeat;
+            background-position: center;
+        }
+    }
+
+    &.d_0,
+    &.d_1,
+    &.d_2,
+    &.d_3 {
+        background-size: contain;
+        background-repeat: no-repeat;
+        background-position: center;
+    }
+}
+
+.road_line {
+    min-width: 0.5vw;
+    height: 100%;
+    background: url('../../../assets/img/road_lines.svg');
+}
+
+.rate-lbl {
+    width: 80%;
+    background: url('../../../assets/img/button_state2.svg');
+    color: #F8F1D7;
+    font-weight: bold;
+    text-align: center;
+    line-height: 2.5vw;
+    padding: 0.2vw 0.5vw;
+    border-radius: 1.6vw;
+    font-size: 1.2vw;
+    margin: 2vw auto;
+    background-size: contain;
+    background-position: center;
+    background-repeat: no-repeat;
+    cursor: pointer;
+
+    &.win {
+        background: url('../../../assets/img/button_state1.svg');
+        background-size: cover;
+        background-repeat: no-repeat;
+        color: #707278;
+    }
+
+    &.current {
+        &.d_0 {
+            background: url('../../../assets/img/button_easy.svg');
+            color: #5ADDF8;
+
+        }
+
+        &.d_1 {
+            background: url('../../../assets/img/button_medium.svg');
+            color: #922BE1;
+        }
+
+        &.d_2 {
+            background: url('../../../assets/img/button_hard.svg');
+            color: #20E42C;
+        }
+
+        &.d_3 {
+            background: url('../../../assets/img/button_expert.svg');
+            color: #FEC414;
+        }
+
+        &.d_0,
+        &.d_1,
+        &.d_2,
+        &.d_3 {
+
+            background-size: cover;
+            background-repeat: no-repeat;
+            background-position: center;
+        }
+    }
+
+    &.lost {
+        background: #FD1500;
+        color: #F8F1D7;
+    }
+}
+
+.car {
+    position: absolute;
+    margin-top: 3%;
+    top: -100%;
+    width: 100%;
+    height: 12vw;
+    z-index: 3;
+}
+
+.car_0 {
+    background: url('../../../assets/img/car_0.svg');
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+.car_1 {
+    background: url('../../../assets/img/car_01.svg');
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+.car_2 {
+    background: url('../../../assets/img/car_02.svg');
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+.car_3 {
+    background: url('../../../assets/img/car_03.svg');
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+.car_4 {
+    background: url('../../../assets/img/car_04.svg');
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+.car_5 {
+    background: url('../../../assets/img/car_05.svg');
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+.car_6 {
+    background: url('../../../assets/img/car_06.svg');
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+@keyframes upDown {
+    0% {
+        transform: translateY(0);
+    }
+
+    50% {
+        transform: translateY(-5vw);
+    }
+
+    100% {
+        transform: translateY(0);
+    }
+}
+
+@keyframes fall {
+    0% {
+        transform: translateY(0);
+        opacity: 1;
+    }
+
+    100% {
+        transform: translateY(3vw);
+        opacity: 0;
+    }
+}
+
+@keyframes spinFlip {
+    0% {
+        transform: rotateY(0deg);
+    }
+
+    50% {
+        transform: rotateY(180deg);
+    }
+
+    100% {
+        transform: rotateY(360deg);
+    }
+}
+
+.rate-wrapper {
+    position: relative;
+    top: 29vw;
+}
+
+
+.tooltip {
+    position: relative;
+    left: 50%;
+    width: fit-content;
+    transform: translateX(-50%) translateY(8px);
+    bottom: calc(100% + 10px);
+    min-width: 160px;
+    padding: 1.2vw;
+    background: #1A191D;
+    color: #fff;
+    border-radius: 6px;
+    pointer-events: none;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 160ms ease, transform 160ms ease, visibility 0ms linear 160ms;
+    z-index: 20;
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.25);
+    border-radius: 1vw;
+    display: flex;
+}
+
+.tooltip::before {
+    content: "";
+    position: absolute;
+    top: -6px;
+    left: 50%;
+    transform: translateX(-50%) rotate(45deg);
+    width: 12px;
+    height: 12px;
+    background: #1A191D;
+}
+
+.rate-wrapper:hover .tooltip,
+.rate-wrapper:focus-within .tooltip {
+    opacity: 1;
+    visibility: visible;
+    transform: translateX(-50%) translateY(0);
+    transition-delay: 0s;
+}
+
+.tooltip.bottom {
+    top: calc(100% + 10px);
+    bottom: auto;
+    transform: translateX(-50%) translateY(-8px);
+}
+
+.tooltip.bottom::after {
+    top: -6px;
+    bottom: auto;
+    transform: translateX(-50%) rotate(45deg);
+    z-index: -1;
+}
+.t-col{
+    margin: 0 0.5vw;
+}
+label {
+    text-align: left;
+    display: block;
+    font-weight: bold;
+    font-size: 14px;
+    color: #999999;
+}
+
+.profit {
+    font-size: 14px;
+    color: #fff;
+    min-width: 15vw;
+}
+
+.profit-value {
+    display: flex;
+    color: #fff;
+    align-items: center;
+    background: #282A2F;
+    border: 2px solid #282A2F;
+    padding: 10px;
+    border-radius: 0.6vw;
+    margin-top: 5px;
+    position: relative;
+    .suffix {
+        position: absolute;
+        right: 0.5vw;
+        margin: auto 5px;
+        font-size: 12px;
+        min-width: 18px;
+        height: 18px;
+        line-height: 18px;
+        text-align: center;
+        font-weight: bold;
+        color: #FFFFFF;
+        border-radius: 100%;
+        background-color: #F7931A;
+    }
+    .posfix{
+        color: #7DA7B2;
+        font-weight: 600;
+        position: absolute;
+        right: 10px;
+    }
+}
+
+.mobile {
+
+    .lane {
+        width: 22vw;
+
+        .manhole-wrapper {
+            width: 16vw;
+            height: 10.1vw;
+            top: 30vw;
+            padding-top: 2vw;
+            left: 4.5vw;
+        }
+
+        .manhole {
+            width: 16vw;
+            height: 9.7vw;
+            z-index: 0;
+        }
+
+        .hole {
+            margin: 0.5vw 0.1vw;
+            width: 11.6vw;
+            height: 6.4vw;
+            z-index: -1;
+        }
+        .frog-wrap{
+            z-index: 3;
+        }
+        app-flame{
+            width: 6vw;
+            height: 8vw;
+            left: 3vw;
+            z-index: 3;
+            position: absolute;
+        }
+
+        .fried {
+            app-flame {
+                z-index: 12;
+            }
+            .manhole {
+                opacity: 0.9;
+            }
+            .hole {
+                overflow: visible;
+            }
+        }
+
+    }
+
+    .barrier-stop {
+        top: 25vw;
+        height: 6.0vw;
+    }
+
+    .road_line {
+        min-width: 1vw;
+        background-size: contain;
+    }
+
+    .rate-lbl {
+        top: 28vw;
+        width: 80%;
+        line-height: 3.9vw;
+        padding: 0.5vw 0.5vw;
+        border-radius: 1.6vw;
+        font-size: 2.4vw;
+        margin: 4vw auto 2vw;
+    }
+
+    .car {
+        position: absolute;
+        margin-top: 0%;
+        top: -100%;
+        width: 100%;
+        height: 14vw;
+        z-index: 3;
+    }
+    .tooltip {
+        bottom: calc(100% + 10px);
+        min-width: 160px;
+        padding: 1.2vw;
+        border-radius: 6px;
+        border-radius: 1vw;
+    }
+    
+    .t-col{
+        margin: 0 0.5vw;
+    }
+    label {
+        font-size: 9px;
+    }
+    
+    .profit {
+        font-size: 9px;
+        min-width: 22vw;
+    }
+    
+    .profit-value {
+        border: 1px solid #282A2F;
+        padding: 2px;
+        border-radius: 0.6vw;
+        margin-top: 5px;
+        .suffix {
+            right: 0.5vw;
+            margin: auto 5px;
+            font-size: 9px;
+            min-width: 12px;
+            height: 12px;
+            line-height: 12px;
+        }
+        .posfix{
+            right: 5px;
+        }
+    }
+    
+}

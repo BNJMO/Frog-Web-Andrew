@@ -1,0 +1,9 @@
+<div class="msg-wrapper" *ngIf="visible"  [ngClass]="utils.isMobile()?'mobile:':'desktop'">
+  <div class="msg-box">
+    <div class="msg-text">{{text  | translate: params}}</div>
+    <div class="msg-btns">
+      <div class="btn confirm-btn" (click)="confirmClick($event)">{{confirmText | translate}}</div>
+      <div class="btn cancel-btn" *ngIf="cancel" (click)="cancelClick($event)">{{cancelText | translate}}</div>
+    </div>
+  </div>
+</div>
