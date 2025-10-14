@@ -93,9 +93,11 @@ export async function createGame(mount, opts = {}) {
 
   // Visuals
   const diamondTexturePath =
-    opts.diamondTexturePath ?? opts.dimaondTexturePath ?? "assets/mines/sprites/Diamond.png";
+    opts.diamondTexturePath ??
+    opts.dimaondTexturePath ??
+    "src/mines/assets/sprites/Diamond.png";
   const bombTexturePath =
-    opts.bombTexturePath ?? "assets/mines/sprites/Bomb.png";
+    opts.bombTexturePath ?? "src/mines/assets/sprites/Bomb.png";
   const iconSizePercentage = opts.iconSizePercentage ?? 0.7;
   const iconRevealedSizeOpacity = opts.iconRevealedSizeOpacity ?? 0.4;
   const iconRevealedSizeFactor = opts.iconRevealedSizeFactor ?? 0.85;
@@ -138,7 +140,7 @@ export async function createGame(mount, opts = {}) {
   /* Bomb Explosion spritesheet */
   const explosionSheetEnabled = opts.explosionSheetEnabled ?? true;
   const explosionSheetPath =
-    opts.explosionSheetPath ?? "assets/mines/sprites/Explosion_Spritesheet.png";
+    opts.explosionSheetPath ?? "src/mines/assets/sprites/Explosion_Spritesheet.png";
   const explosionSheetCols = opts.explosionSheetCols ?? 7;
   const explosionSheetRows = opts.explosionSheetRows ?? 3;
   const explosionSheetFps = opts.explosionSheetFps ?? 24;
@@ -147,18 +149,18 @@ export async function createGame(mount, opts = {}) {
 
   /* Sound effects */
   const tileTapDownSoundPath =
-    opts.tileTapDownSoundPath ?? "assets/mines/sounds/TileTapDown.wav";
+    opts.tileTapDownSoundPath ?? "src/mines/assets/sounds/TileTapDown.wav";
   const tileFlipSoundPath =
-    opts.tileFlipSoundPath ?? "assets/mines/sounds/TileFlip.wav";
+    opts.tileFlipSoundPath ?? "src/mines/assets/sounds/TileFlip.wav";
   const tileHoverSoundPath =
-    opts.tileHoverSoundPath ?? "assets/mines/sounds/TileHover.wav";
+    opts.tileHoverSoundPath ?? "src/mines/assets/sounds/TileHover.wav";
   const diamondRevealedSoundPath =
-    opts.diamondRevealedSoundPath ?? "assets/mines/sounds/DiamondRevealed.wav";
+    opts.diamondRevealedSoundPath ?? "src/mines/assets/sounds/DiamondRevealed.wav";
   const bombRevealedSoundPath =
-    opts.bombRevealedSoundPath ?? "assets/mines/sounds/BombRevealed.wav";
-  const winSoundPath = opts.winSoundPath ?? "assets/mines/sounds/Win.wav";
+    opts.bombRevealedSoundPath ?? "src/mines/assets/sounds/BombRevealed.wav";
+  const winSoundPath = opts.winSoundPath ?? "src/mines/assets/sounds/Win.wav";
   const gameStartSoundPath =
-    opts.gameStartSoundPath ?? "assets/mines/sounds/GameStart.wav";
+    opts.gameStartSoundPath ?? "src/mines/assets/sounds/GameStart.wav";
   const diamondRevealPitchMin = Number(opts.diamondRevealPitchMin ?? 1.0);
   const diamondRevealPitchMax = Number(opts.diamondRevealPitchMax ?? 1.5);
 

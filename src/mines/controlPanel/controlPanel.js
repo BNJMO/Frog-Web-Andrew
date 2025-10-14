@@ -1,8 +1,8 @@
 import { Stepper } from "../stepper/stepper.js";
 
-const BITCOIN_ICON_PATH = "assets/mines/sprites/BitCoin.png";
-const INFINITY_ICON_PATH = "assets/mines/sprites/Infinity.png";
-const PERCENTAGE_ICON_PATH = "assets/mines/sprites/Percentage.png";
+const BITCOIN_ICON_PATH = "src/mines/assets/sprites/BitCoin.png";
+const INFINITY_ICON_PATH = "src/mines/assets/sprites/Infinity.png";
+const PERCENTAGE_ICON_PATH = "src/mines/assets/sprites/Percentage.png";
 
 function resolveMount(mount) {
   if (!mount) {
