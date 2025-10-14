@@ -1,0 +1,567 @@
+.control-panel-mount {
+  flex: 0 1 27%;
+  display: flex;
+  max-width: 27%;
+  order: 1;
+}
+
+.control-panel {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  background: #1a191d;
+}
+
+.control-toggle {
+  display: flex;
+  gap: 8px;
+  background: #000000;
+  padding: 6px;
+  border-radius: 40px;
+}
+
+.control-toggle-btn {
+  flex: 1;
+  border: none;
+  background: transparent;
+  color: #9a9da6;
+  font-size: 0.95rem;
+  font-weight: 600;
+  border-radius: 40px;
+  padding: 10px 0;
+  cursor: pointer;
+  transition: background 0.2s ease, color 0.2s ease, transform 0.2s ease;
+}
+
+.control-toggle-btn:not(.is-active):hover {
+  background: rgba(40, 42, 47, 0.6);
+  color: #c3c5cc;
+}
+
+.control-toggle-btn.is-active {
+  background: #282a2f;
+  color: #ffffff;
+  transform: translateY(-1px);
+}
+
+.control-toggle-btn:focus-visible {
+  outline: 2px solid rgba(234, 255, 0, 0.6);
+  outline-offset: 2px;
+}
+
+.control-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.control-row-label {
+  color: #999999;
+  font-size: 0.95rem;
+  font-weight: 600;
+}
+
+.control-row-value {
+  color: #999999;
+  font-size: 1rem;
+  font-weight: 400;
+}
+
+.control-bet-box {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  background: #282a2f;
+  border-radius: 8px;
+  padding: 2px;
+  min-width: 0;
+}
+
+.control-select-field {
+  position: relative;
+  display: flex;
+  align-items: center;
+  background: #000000;
+  border-radius: 8px;
+  border: 1px solid #2f3136;
+  color: #f1f5ff;
+  font-weight: 600;
+  font-size: 1rem;
+  min-width: 0;
+  width: 100%;
+}
+
+.control-select {
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  border: none;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  flex: 1 1 auto;
+  padding: 14px 44px 14px 16px;
+  cursor: pointer;
+  outline: none;
+}
+
+.control-select:focus-visible {
+  outline: 2px solid rgba(234, 255, 0, 0.6);
+  outline-offset: 2px;
+}
+
+.control-select-field:focus-within {
+  box-shadow: 0 0 0 2px rgba(234, 255, 0, 0.2);
+}
+
+.control-select-field.is-non-clickable {
+  background: #121215;
+  border-color: #1e2024;
+  color: #6f7178;
+}
+
+.control-select-field.is-non-clickable .control-select-arrow {
+  border-top-color: #6f7178;
+}
+
+.control-select:disabled {
+  color: inherit;
+  cursor: not-allowed;
+}
+
+.control-select-arrow {
+  position: absolute;
+  right: 18px;
+  width: 0;
+  height: 0;
+  border-left: 6px solid transparent;
+  border-right: 6px solid transparent;
+  border-top: 6px solid #f1f5ff;
+  pointer-events: none;
+}
+
+.control-select option {
+  color: #f1f5ff;
+  background: #000000;
+}
+
+.control-bet-input-field {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: #000000;
+  border-radius: 8px;
+  border: 1px solid #2f3136;
+  color: #f1f5ff;
+  font-size: 1rem;
+  font-weight: 600;
+  flex: 1 1 auto;
+  min-width: 0;
+  --control-bet-padding-right: clamp(56px, 20%, 118px);
+  --control-bet-stepper-offset: clamp(28px, 14%, 72px);
+  --control-bet-icon-offset: clamp(10px, 6%, 18px);
+  padding: 14px var(--control-bet-padding-right) 14px 16px;
+}
+
+.control-bet-input {
+  flex: 1 1 auto;
+  min-width: 0;
+  border: none;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  outline: none;
+}
+
+.control-bet-input-icon {
+  position: absolute;
+  right: var(--control-bet-icon-offset);
+  width: 18px;
+  height: 18px;
+  opacity: 0.85;
+  pointer-events: none;
+}
+
+.control-bet-action {
+  border: none;
+  background: #282a2f;
+  color: #f5f6ff;
+  font-weight: 700;
+  font-size: 0.95rem;
+  border-radius: 14px;
+  padding: 12px 18px;
+  flex: 0 0 auto;
+  cursor: pointer;
+  transition: background 0.2s ease, transform 0.2s ease;
+}
+
+.control-bet-action:hover {
+  background: #34363d;
+  transform: translateY(-1px);
+}
+
+.control-bet-separator {
+  width: 1px;
+  height: 36px;
+  background: #000000;
+  border-radius: 1px;
+}
+
+.control-bet-btn {
+  width: 100%;
+  border: none;
+  border-radius: 8px;
+  background: linear-gradient(135deg, #eaff00 0%, #eaff00 100%);
+  color: #000000;
+  font-size: 1.05rem;
+  font-weight: 700;
+  padding: 16px;
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.control-bet-btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 12px 24px rgba(234, 255, 0, 0.2);
+}
+
+.control-bet-btn.is-non-clickable,
+.control-bet-btn:disabled {
+  background: linear-gradient(135deg, #687000 0%, #687000 100%);
+  cursor: not-allowed;
+  pointer-events: none;
+  box-shadow: none;
+  transform: none;
+  color: #121212;
+}
+
+.control-bet-btn.is-non-clickable:hover,
+.control-bet-btn:disabled:hover {
+  box-shadow: none;
+  transform: none;
+}
+
+.control-random-btn {
+  background: #2f3136;
+  color: #f5f6ff;
+  box-shadow: none;
+}
+
+.control-random-btn:hover {
+  box-shadow: none;
+  background: #3a3c44;
+}
+
+.control-random-btn.is-non-clickable,
+.control-random-btn:disabled {
+  background: #1f2024;
+  color: #7c7f8c;
+}
+
+.control-random-btn.is-non-clickable:hover,
+.control-random-btn:disabled:hover {
+  background: #1f2024;
+}
+
+.control-profit-box {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: #282a2f;
+  border-radius: 8px;
+  padding: 14px 18px;
+}
+
+.control-profit-value {
+  font-weight: 700;
+  font-size: 1rem;
+}
+
+.control-gems-box {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  background: #282a2f;
+  border-radius: 8px;
+  padding: 14px 18px;
+}
+
+.control-gems-value {
+  font-weight: 700;
+  font-size: 1rem;
+}
+
+.control-profit-icon {
+  width: 20px;
+  height: 20px;
+  opacity: 0.85;
+}
+
+.control-game-name {
+  font-weight: 700;
+  font-size: 1.1rem;
+  padding-top: 48px;
+  padding-left: 16px;
+  color: #ffffff;
+  margin-top: auto;
+}
+
+.control-mode-section {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.control-mode-section[hidden] {
+  display: none !important;
+}
+
+.control-section-label {
+  color: #9a9da6;
+  font-size: 0.95rem;
+  font-weight: 600;
+  padding-left: 4px;
+}
+
+.auto-number-field {
+  --control-bet-padding-right: 92px;
+  --control-bet-stepper-offset: 20px;
+  --control-bet-icon-offset: 54px;
+  padding: 14px var(--control-bet-padding-right) 14px 16px;
+}
+
+.auto-number-input {
+  text-align: left;
+}
+
+.auto-number-infinity {
+  position: absolute;
+  right: calc(var(--control-bet-stepper-offset) + 34px);
+  width: 20px;
+  height: 20px;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+  pointer-events: none;
+}
+
+.auto-number-infinity.is-visible {
+  opacity: 1;
+}
+
+.control-section-divider {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 8px 0;
+}
+
+.control-section-divider::before {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: #2f3136;
+  transform: translateY(-50%);
+}
+
+.control-section-divider-label {
+  position: relative;
+  z-index: 1;
+  color: #9a9da6;
+  font-size: 0.95rem;
+  font-weight: 600;
+  background: #1a191d;
+  padding-right: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.control-switch {
+  position: relative;
+  width: 56px;
+  height: 28px;
+  border: none;
+  border-radius: 999px;
+  background: #282a2f;
+  padding: 4px;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.control-switch.is-on {
+  background: #00b801;
+}
+
+.control-switch:focus-visible {
+  outline: 2px solid rgba(234, 255, 0, 0.6);
+  outline-offset: 2px;
+}
+
+.control-switch-handle {
+  position: absolute;
+  top: 4px;
+  left: 4px;
+  width: 20px;
+  height: 20px;
+  border-radius: 999px;
+  background: #ffffff;
+  transition: transform 0.2s ease;
+}
+
+.control-switch.is-on .control-switch-handle {
+  transform: translateX(28px);
+}
+
+.auto-advanced-content {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.auto-advanced-content[hidden] {
+  display: none !important;
+}
+
+.auto-advanced-strategy-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: #1f2024;
+  border-radius: 10px;
+  padding: 10px 12px;
+}
+
+.auto-mode-toggle {
+  display: flex;
+  align-items: stretch;
+  background: #282a2f;
+  border-radius: 8px;
+  overflow: hidden;
+  border: 1px solid #2f3136;
+}
+
+.auto-mode-toggle-btn {
+  flex: 1 1 auto;
+  border: none;
+  background: transparent;
+  color: #9a9da6;
+  font-size: 0.9rem;
+  font-weight: 600;
+  padding: 10px 14px;
+  cursor: pointer;
+  transition: background 0.2s ease, color 0.2s ease;
+}
+
+.auto-mode-toggle-btn.is-reset {
+  flex: 0 0 25%;
+}
+
+.auto-mode-toggle-btn.is-active {
+  background: #00b801;
+  color: #000000;
+}
+
+.auto-mode-toggle-btn:focus-visible {
+  outline: 2px solid rgba(234, 255, 0, 0.6);
+  outline-offset: -2px;
+}
+
+.auto-advanced-input {
+  flex: 1 1 auto;
+  --control-bet-padding-right: 52px;
+  padding: 12px var(--control-bet-padding-right) 12px 14px;
+}
+
+.auto-advanced-summary-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  color: #9a9da6;
+  font-size: 0.95rem;
+  font-weight: 600;
+  padding: 0 4px;
+}
+
+.auto-advanced-summary-label {
+  font-weight: 600;
+}
+
+.auto-advanced-summary-value {
+  color: #ffffff;
+  font-weight: 700;
+}
+
+.auto-currency-field {
+  --control-bet-padding-right: 56px;
+  padding: 14px var(--control-bet-padding-right) 14px 16px;
+}
+
+.auto-advanced-input.is-disabled,
+.auto-advanced-input.is-disabled .control-bet-input {
+  color: #6f7178;
+}
+
+.auto-advanced-input.is-disabled {
+  background: #16171b;
+  border-color: #1f2024;
+}
+
+.auto-advanced-input.is-disabled .control-bet-input-icon {
+  opacity: 0.4;
+}
+
+.control-start-autobet-btn {
+  margin-top: 6px;
+}
+
+.control-bet-input-field.has-stepper .game-panel-stepper {
+  right: var(--control-bet-stepper-offset);
+}
+
+@media (max-width: 1100px), (orientation: portrait) {
+  .control-panel-mount {
+    order: 2;
+    flex: 1 1 auto;
+    max-width: none;
+    width: 100%;
+  }
+
+  .control-panel {
+    max-width: none;
+  }
+
+  .control-toggle {
+    display: none;
+  }
+
+  #betBtn.control-bet-btn {
+    order: -2;
+  }
+
+  .control-random-btn {
+    order: -1;
+  }
+}
+
+@media (max-width: 768px) {
+  .control-bet-input-field {
+    --control-bet-padding-right: max(64px, 24%);
+    padding: 12px var(--control-bet-padding-right) 12px 14px;
+    border-radius: 12px;
+  }
+
+  .control-bet-action {
+    padding: 10px 14px;
+    font-size: 0.9rem;
+  }
+
+  .control-bet-box {
+    gap: 10px;
+  }
+}
