@@ -4,6 +4,7 @@
   "compilerOptions": {
     "outDir": "./dist/out-tsc",
     "forceConsistentCasingInFileNames": true,
+    "allowJs": true,
     "strict": false,
     "noImplicitOverride": true,
     "noPropertyAccessFromIndexSignature": false,
