@@ -32,25 +32,3 @@ body {
     background-size: contain;
     background-repeat: no-repeat;
 }
-
-.frog {
-    background: url('assets/img/frog_01.svg');
-    background-size: contain;
-    background-repeat: no-repeat;
-}
-
-.lane {
-    app-frog {
-        position: absolute;
-        top: -1vw;
-        left: 0.5vw;
-        z-index: 3;
-    }
-}
-.lanes{
-    app-lane:last-child {
-       .buoy {
-           display: none;
-       } 
-     }
-}
