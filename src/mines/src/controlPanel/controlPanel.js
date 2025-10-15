@@ -3,6 +3,54 @@ import bitcoinIconUrl from "../../assets/sprites/BitCoin.png";
 import infinityIconUrl from "../../assets/sprites/Infinity.png";
 import percentageIconUrl from "../../assets/sprites/Percentage.png";
 
+export const DEFAULT_CONTROL_PANEL_STRINGS = {
+  manualMode: "Manual",
+  autoMode: "Auto",
+  betAmountLabel: "Bet Amount",
+  profitOnWinLabel: "Profit on Win",
+  profitLabel: "Profit",
+  minesLabel: "Mines",
+  gemsLabel: "Gems",
+  betButtonLabel: "Bet",
+  cashOutButtonLabel: "Cashout",
+  randomPickLabel: "Random Pick",
+  randomPickAria: "Pick a random tile",
+  halveBetAria: "Halve bet value",
+  doubleBetAria: "Double bet value",
+  increaseBetAria: "Increase bet amount",
+  decreaseBetAria: "Decrease bet amount",
+  numberOfBetsLabel: "Number of Bets",
+  advancedLabel: "Advanced",
+  onWinLabel: "On Win",
+  onLossLabel: "On Loss",
+  stopOnProfitLabel: "Stop on Profit",
+  stopOnLossLabel: "Stop on Loss",
+  startAutobetLabel: "Start Autobet",
+  resetStrategyLabel: "Reset",
+  increaseStrategyLabel: "Increase by:",
+  betInputAria: "Bet Amount",
+  autoModeAria: "Switch to auto mode",
+  manualModeAria: "Switch to manual mode",
+};
+
+function joinAssetPath(baseUrl, relativePath) {
+  if (!baseUrl) {
+    return relativePath;
+  }
+  const normalizedBase = baseUrl.endsWith("/") ? baseUrl : `${baseUrl}/`;
+  return `${normalizedBase}${relativePath.replace(/^\//, "")}`;
+}
+
+function resolveAssetPath({ assetBaseUrl, override, fallback, relativePath }) {
+  if (override) {
+    return override;
+  }
+  if (assetBaseUrl) {
+    return joinAssetPath(assetBaseUrl, relativePath);
+  }
+  return fallback;
+}
+
 function resolveMount(mount) {
   if (!mount) {
     throw new Error("Control panel mount target is required");
@@ -24,20 +72,58 @@ function clampToZero(value) {
 export class ControlPanel extends EventTarget {
   constructor(mount, options = {}) {
     super();
+
+    const {
+      strings = {},
+      assetBaseUrl,
+      assets = {},
+      initialBetValue = "0.00000000",
+      initialBetAmountDisplay = "$0.00",
+      initialProfitOnWinDisplay = "$0.00",
+      initialProfitValue = "0.00000000",
+      initialMode = "manual",
+      gameName = "Game Name",
+      initialMines = 1,
+      maxMines,
+      totalTiles,
+    } = options;
+
+    this.strings = {
+      ...DEFAULT_CONTROL_PANEL_STRINGS,
+      ...strings,
+    };
+
+    this.assets = {
+      coinIcon: resolveAssetPath({
+        assetBaseUrl,
+        override: assets.coinIcon ?? assets.betIcon,
+        fallback: bitcoinIconUrl,
+        relativePath: "assets/sprites/BitCoin.png",
+      }),
+      infinityIcon: resolveAssetPath({
+        assetBaseUrl,
+        override: assets.infinityIcon,
+        fallback: infinityIconUrl,
+        relativePath: "assets/sprites/Infinity.png",
+      }),
+      percentageIcon: resolveAssetPath({
+        assetBaseUrl,
+        override: assets.percentageIcon,
+        fallback: percentageIconUrl,
+        relativePath: "assets/sprites/Percentage.png",
+      }),
+    };
+
     this.options = {
-      betAmountLabel: options.betAmountLabel ?? "Bet Amount",
-      profitOnWinLabel: options.profitOnWinLabel ?? "Profit on Win",
-      initialBetValue: options.initialBetValue ?? "0.00000000",
-      initialBetAmountDisplay: options.initialBetAmountDisplay ?? "$0.00",
-      initialProfitOnWinDisplay: options.initialProfitOnWinDisplay ?? "$0.00",
-      initialProfitValue: options.initialProfitValue ?? "0.00000000",
-      initialMode: options.initialMode ?? "manual",
-      gameName: options.gameName ?? "Game Name",
-      minesLabel: options.minesLabel ?? "Mines",
-      gemsLabel: options.gemsLabel ?? "Gems",
-      initialMines: options.initialMines ?? 1,
-      maxMines: options.maxMines,
-      totalTiles: options.totalTiles,
+      initialBetValue,
+      initialBetAmountDisplay,
+      initialProfitOnWinDisplay,
+      initialProfitValue,
+      initialMode: initialMode === "auto" ? "auto" : "manual",
+      gameName,
+      initialMines,
+      maxMines,
+      totalTiles,
     };
 
     this.host = resolveMount(mount);
@@ -106,13 +192,18 @@ export class ControlPanel extends EventTarget {
     this.manualButton = document.createElement("button");
     this.manualButton.type = "button";
     this.manualButton.className = "control-toggle-btn";
-    this.manualButton.textContent = "Manual";
+    this.manualButton.textContent = this.strings.manualMode;
+    this.manualButton.setAttribute(
+      "aria-label",
+      this.strings.manualModeAria
+    );
     this.manualButton.addEventListener("click", () => this.setMode("manual"));
 
     this.autoButton = document.createElement("button");
     this.autoButton.type = "button";
     this.autoButton.className = "control-toggle-btn";
-    this.autoButton.textContent = "Auto";
+    this.autoButton.textContent = this.strings.autoMode;
+    this.autoButton.setAttribute("aria-label", this.strings.autoModeAria);
     this.autoButton.addEventListener("click", () => this.setMode("auto"));
 
     this.toggleWrapper.append(this.manualButton, this.autoButton);
@@ -125,7 +216,7 @@ export class ControlPanel extends EventTarget {
 
     const label = document.createElement("span");
     label.className = "control-row-label";
-    label.textContent = this.options.betAmountLabel;
+    label.textContent = this.strings.betAmountLabel;
     row.appendChild(label);
 
     this.betAmountValue = document.createElement("span");
@@ -148,7 +239,7 @@ export class ControlPanel extends EventTarget {
     this.betInput.inputMode = "decimal";
     this.betInput.spellcheck = false;
     this.betInput.autocomplete = "off";
-    this.betInput.setAttribute("aria-label", this.options.betAmountLabel);
+    this.betInput.setAttribute("aria-label", this.strings.betInputAria);
     this.betInput.className = "control-bet-input";
     this.betInput.addEventListener("input", () => this.dispatchBetValueChange());
     this.betInput.addEventListener("blur", () => {
@@ -157,7 +248,7 @@ export class ControlPanel extends EventTarget {
     this.betInputWrapper.appendChild(this.betInput);
 
     const icon = document.createElement("img");
-    icon.src = bitcoinIconUrl;
+    icon.src = this.assets.coinIcon;
     icon.alt = "";
     icon.className = "control-bet-input-icon";
     this.betInputWrapper.appendChild(icon);
@@ -165,8 +256,8 @@ export class ControlPanel extends EventTarget {
     this.betStepper = new Stepper({
       onStepUp: () => this.adjustBetValue(1e-8),
       onStepDown: () => this.adjustBetValue(-1e-8),
-      upAriaLabel: "Increase bet amount",
-      downAriaLabel: "Decrease bet amount",
+      upAriaLabel: this.strings.increaseBetAria,
+      downAriaLabel: this.strings.decreaseBetAria,
     });
     this.betInputWrapper.appendChild(this.betStepper.element);
 
@@ -174,14 +265,14 @@ export class ControlPanel extends EventTarget {
     this.halfButton.type = "button";
     this.halfButton.className = "control-bet-action";
     this.halfButton.textContent = "½";
-    this.halfButton.setAttribute("aria-label", "Halve bet value");
+    this.halfButton.setAttribute("aria-label", this.strings.halveBetAria);
     this.halfButton.addEventListener("click", () => this.scaleBetValue(0.5));
 
     this.doubleButton = document.createElement("button");
     this.doubleButton.type = "button";
     this.doubleButton.className = "control-bet-action";
     this.doubleButton.textContent = "2×";
-    this.doubleButton.setAttribute("aria-label", "Double bet value");
+    this.doubleButton.setAttribute("aria-label", this.strings.doubleBetAria);
     this.doubleButton.addEventListener("click", () => this.scaleBetValue(2));
 
     const separator = document.createElement("div");
@@ -202,7 +293,7 @@ export class ControlPanel extends EventTarget {
 
     const label = document.createElement("span");
     label.className = "control-row-label";
-    label.textContent = this.options.minesLabel;
+    label.textContent = this.strings.minesLabel;
     row.appendChild(label);
 
     this.container.appendChild(row);
@@ -214,7 +305,7 @@ export class ControlPanel extends EventTarget {
 
     this.minesSelect = document.createElement("select");
     this.minesSelect.className = "control-select";
-    this.minesSelect.setAttribute("aria-label", this.options.minesLabel);
+    this.minesSelect.setAttribute("aria-label", this.strings.minesLabel);
     this.minesSelect.addEventListener("change", () => {
       const value = Math.floor(Number(this.minesSelect.value) || 1);
       this.currentMines = Math.max(1, Math.min(value, this.maxMines));
@@ -240,7 +331,7 @@ export class ControlPanel extends EventTarget {
 
     const label = document.createElement("span");
     label.className = "control-row-label";
-    label.textContent = this.options.gemsLabel;
+    label.textContent = this.strings.gemsLabel;
     row.appendChild(label);
 
     this.container.appendChild(row);
@@ -277,7 +368,9 @@ export class ControlPanel extends EventTarget {
   }
 
   buildAutoControls() {
-    this.autoNumberOfBetsLabel = this.createSectionLabel("Number of Bets");
+    this.autoNumberOfBetsLabel = this.createSectionLabel(
+      this.strings.numberOfBetsLabel
+    );
     this.autoSection.appendChild(this.autoNumberOfBetsLabel);
 
     this.autoNumberOfBetsField = document.createElement("div");
@@ -303,7 +396,7 @@ export class ControlPanel extends EventTarget {
     this.autoNumberOfBetsField.appendChild(this.autoNumberOfBetsInput);
 
     this.autoNumberOfBetsInfinityIcon = document.createElement("img");
-    this.autoNumberOfBetsInfinityIcon.src = infinityIconUrl;
+    this.autoNumberOfBetsInfinityIcon.src = this.assets.infinityIcon;
     this.autoNumberOfBetsInfinityIcon.alt = "";
     this.autoNumberOfBetsInfinityIcon.className = "auto-number-infinity";
     this.autoNumberOfBetsField.appendChild(
@@ -324,7 +417,7 @@ export class ControlPanel extends EventTarget {
 
     this.autoAdvancedLabel = document.createElement("span");
     this.autoAdvancedLabel.className = "control-section-divider-label";
-    this.autoAdvancedLabel.textContent = "Advanced";
+    this.autoAdvancedLabel.textContent = this.strings.advancedLabel;
     this.autoAdvancedHeader.appendChild(this.autoAdvancedLabel);
 
     this.autoAdvancedToggle = this.createSwitchButton({
@@ -339,11 +432,15 @@ export class ControlPanel extends EventTarget {
     this.autoAdvancedContent.className = "auto-advanced-content";
     this.autoSection.appendChild(this.autoAdvancedContent);
 
-    this.autoAdvancedContent.appendChild(this.createSectionLabel("On Win"));
+    this.autoAdvancedContent.appendChild(
+      this.createSectionLabel(this.strings.onWinLabel)
+    );
     const onWinRow = this.createAdvancedStrategyRow("win");
     this.autoAdvancedContent.appendChild(onWinRow);
 
-    this.autoAdvancedContent.appendChild(this.createSectionLabel("On Loss"));
+    this.autoAdvancedContent.appendChild(
+      this.createSectionLabel(this.strings.onLossLabel)
+    );
     const onLossRow = this.createAdvancedStrategyRow("loss");
     this.autoAdvancedContent.appendChild(onLossRow);
 
@@ -351,7 +448,7 @@ export class ControlPanel extends EventTarget {
     profitRow.className = "auto-advanced-summary-row";
     const profitLabel = document.createElement("span");
     profitLabel.className = "auto-advanced-summary-label";
-    profitLabel.textContent = "Stop on Profit";
+    profitLabel.textContent = this.strings.stopOnProfitLabel;
     const profitValue = document.createElement("span");
     profitValue.className = "auto-advanced-summary-value";
     profitValue.textContent = "$0.00";
@@ -365,7 +462,7 @@ export class ControlPanel extends EventTarget {
     lossRow.className = "auto-advanced-summary-row";
     const lossLabel = document.createElement("span");
     lossLabel.className = "auto-advanced-summary-label";
-    lossLabel.textContent = "Stop on Loss";
+    lossLabel.textContent = this.strings.stopOnLossLabel;
     const lossValue = document.createElement("span");
     lossValue.className = "auto-advanced-summary-value";
     lossValue.textContent = "$0.00";
@@ -379,7 +476,7 @@ export class ControlPanel extends EventTarget {
     this.autoStartButton.type = "button";
     this.autoStartButton.className =
       "control-bet-btn control-start-autobet-btn";
-    this.autoStartButton.textContent = "Start Autobet";
+    this.autoStartButton.textContent = this.strings.startAutobetLabel;
     this.autoSection.appendChild(this.autoStartButton);
 
     this.isAdvancedEnabled = false;
@@ -423,12 +520,12 @@ export class ControlPanel extends EventTarget {
     const resetButton = document.createElement("button");
     resetButton.type = "button";
     resetButton.className = "auto-mode-toggle-btn is-reset";
-    resetButton.textContent = "Reset";
+    resetButton.textContent = this.strings.resetStrategyLabel;
 
     const increaseButton = document.createElement("button");
     increaseButton.type = "button";
     increaseButton.className = "auto-mode-toggle-btn";
-    increaseButton.textContent = "Increase by:";
+    increaseButton.textContent = this.strings.increaseStrategyLabel;
 
     toggle.append(resetButton, increaseButton);
     row.appendChild(toggle);
@@ -447,7 +544,7 @@ export class ControlPanel extends EventTarget {
     field.appendChild(input);
 
     const icon = document.createElement("img");
-    icon.src = percentageIconUrl;
+    icon.src = this.assets.percentageIcon;
     icon.alt = "";
     icon.className = "control-bet-input-icon";
     field.appendChild(icon);
@@ -488,7 +585,7 @@ export class ControlPanel extends EventTarget {
     wrapper.appendChild(input);
 
     const icon = document.createElement("img");
-    icon.src = bitcoinIconUrl;
+    icon.src = this.assets.coinIcon;
     icon.alt = "";
     icon.className = "control-bet-input-icon";
     wrapper.appendChild(icon);
@@ -515,7 +612,11 @@ export class ControlPanel extends EventTarget {
     this.randomPickButton = document.createElement("button");
     this.randomPickButton.type = "button";
     this.randomPickButton.className = "control-bet-btn control-random-btn";
-    this.randomPickButton.textContent = "Random Pick";
+    this.randomPickButton.textContent = this.strings.randomPickLabel;
+    this.randomPickButton.setAttribute(
+      "aria-label",
+      this.strings.randomPickAria
+    );
     this.randomPickButton.addEventListener("click", () => {
       this.dispatchEvent(new CustomEvent("randompick"));
     });
@@ -614,7 +715,7 @@ export class ControlPanel extends EventTarget {
 
     const label = document.createElement("span");
     label.className = "control-row-label";
-    label.textContent = this.options.profitOnWinLabel;
+    label.textContent = this.strings.profitOnWinLabel;
     row.appendChild(label);
 
     this.profitOnWinValue = document.createElement("span");
@@ -634,7 +735,7 @@ export class ControlPanel extends EventTarget {
     this.profitBox.appendChild(this.profitValue);
 
     const icon = document.createElement("img");
-    icon.src = bitcoinIconUrl;
+    icon.src = this.assets.coinIcon;
     icon.alt = "";
     icon.className = "control-profit-icon";
     this.profitBox.appendChild(icon);
@@ -839,7 +940,9 @@ export class ControlPanel extends EventTarget {
     const normalized = mode === "cashout" ? "cashout" : "bet";
     this.betButtonMode = normalized;
     this.betButton.textContent =
-      normalized === "cashout" ? "Cashout" : "Bet";
+      normalized === "cashout"
+        ? this.strings.cashOutButtonLabel
+        : this.strings.betButtonLabel;
     this.betButton.dataset.mode = normalized;
   }
 
@@ -882,5 +985,15 @@ export class ControlPanel extends EventTarget {
 
   getMode() {
     return this.mode;
+  }
+
+  destroy() {
+    this.betStepper?.destroy?.();
+    this.autoNumberOfBetsStepper?.destroy?.();
+    if (this.container?.parentNode) {
+      this.container.parentNode.removeChild(this.container);
+    }
+    this.container = null;
+    this.host = null;
   }
 }

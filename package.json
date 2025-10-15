@@ -1,10 +1,12 @@
 {
   "name": "frog",
   "version": "0.0.1",
+  "types": "types/mines-game.d.ts",
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
     "build": "ng build  --configuration production",
+    "build:mines": "vite build --config vite.config.mines.ts",
     "watch": "ng build --watch --configuration development",
     "test": "ng test"
   },
