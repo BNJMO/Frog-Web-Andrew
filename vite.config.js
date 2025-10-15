@@ -1,15 +1,17 @@
 import { defineConfig } from 'vite';
 import { resolve } from 'path';
 
+const minesRoot = resolve(__dirname, 'src/mines');
+
 export default defineConfig({
-  base: '/Frog-Web-Andrew/',
+  root: minesRoot,
+  base: '/Frog-Web-Andrew/mines/',
   build: {
-    outDir: 'dist',
+    outDir: resolve(__dirname, 'dist/mines'),
+    emptyOutDir: true,
     assetsDir: 'assets',
     rollupOptions: {
-      input: {
-        main: resolve(__dirname, 'index.html'),
-      },
+      input: resolve(minesRoot, 'index.html'),
     },
   },
   server: {
@@ -18,7 +20,7 @@ export default defineConfig({
   },
   resolve: {
     alias: {
-      '@': resolve(__dirname, './src'),
+      '@': resolve(minesRoot, 'src'),
     },
   },
 });
