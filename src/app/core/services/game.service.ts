@@ -13,6 +13,7 @@ import {formatDate} from '@angular/common';
 import {StreamType} from '../stream-type.enum';
 import moment from "moment";
 import { GameSettings } from '../game-settings.model';
+import type { MinesAction } from '../../../../types/mines-game';
 
 @Injectable()
 export class GameService {
@@ -55,6 +56,7 @@ export class GameService {
   public messageEvent = new EventEmitter();
   public errorEvent = new EventEmitter();
   public userDataChangeEvent = new EventEmitter();
+  public minesActionRequested = new EventEmitter<MinesAction>();
   private isAuthenticatedSubject = new ReplaySubject<boolean>(1);
   public isAuthenticated = this.isAuthenticatedSubject.asObservable();
 
@@ -65,6 +67,11 @@ export class GameService {
     } else {
       return false;
     }
+  }
+
+  handleMinesAction(action: MinesAction) {
+    this.minesActionRequested.emit(action);
+    this.sendMessageToParent({ type: 'mines-action', payload: action });
   }
   getSessionId(token) {
     return this.apiService.get(`get_session_id?sessionId=${token}`)

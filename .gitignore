@@ -40,3 +40,11 @@ testem.log
 # System files
 .DS_Store
 Thumbs.db
+# Mines library artifacts
+!/dist
+/dist/*
+!/dist/assets
+/dist/assets/*
+!/dist/assets/style.css
+!/dist/mines-game.js
+!/dist/mines-game.umd.js

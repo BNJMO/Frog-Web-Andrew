@@ -48,6 +48,24 @@ const PALETTE = {
   winPopupMultiplierText: 0xeaff00,
 };
 
+function joinAssetPath(baseUrl, relativePath) {
+  if (!baseUrl) {
+    return relativePath;
+  }
+  const normalizedBase = baseUrl.endsWith("/") ? baseUrl : `${baseUrl}/`;
+  return `${normalizedBase}${relativePath.replace(/^\//, "")}`;
+}
+
+function resolveAssetPath({ assetBaseUrl, override, fallback, relativePath }) {
+  if (override !== undefined) {
+    return override;
+  }
+  if (assetBaseUrl) {
+    return joinAssetPath(assetBaseUrl, relativePath);
+  }
+  return fallback;
+}
+
 function tween(app, { duration = 300, update, complete, ease = (t) => t }) {
   const start = performance.now();
   const step = () => {
@@ -83,7 +101,7 @@ export async function createGame(mount, opts = {}) {
   }
 
   // Options
-  const GRID = opts.grid ?? 5;
+  const GRID = Math.max(2, Math.floor(opts.grid ?? 5));
   let mines = Math.max(1, Math.min(opts.mines ?? 5, GRID * GRID - 1));
   const fontFamily =
     opts.fontFamily ?? "Inter, system-ui, -apple-system, Segoe UI, Arial";
@@ -91,9 +109,75 @@ export async function createGame(mount, opts = {}) {
   const onCardSelected = opts.onCardSelected ?? null;
   const backgroundColor = opts.backgroundColor ?? PALETTE.appBg;
 
+  const assetBaseUrl =
+    typeof opts.assetBaseUrl === "string"
+      ? opts.assetBaseUrl
+      : typeof opts.assets?.baseUrl === "string"
+      ? opts.assets.baseUrl
+      : null;
+
+  const textureOverrides = {
+    diamond:
+      opts.diamondTexturePath ??
+      opts.dimaondTexturePath ??
+      opts.assets?.diamondTexture ??
+      opts.assets?.diamond,
+    bomb:
+      opts.bombTexturePath ?? opts.assets?.bombTexture ?? opts.assets?.bomb,
+    explosionSheet: opts.explosionSheetPath ?? opts.assets?.explosionSheet,
+  };
+
+  const soundOverrides = {
+    tileTapDown:
+      opts.tileTapDownSoundPath ??
+      opts.assets?.tileTapDownSound ??
+      opts.assets?.tileTapDown ??
+      opts.sounds?.tileTapDown,
+    tileFlip:
+      opts.tileFlipSoundPath ??
+      opts.assets?.tileFlipSound ??
+      opts.assets?.tileFlip ??
+      opts.sounds?.tileFlip,
+    tileHover:
+      opts.tileHoverSoundPath ??
+      opts.assets?.tileHoverSound ??
+      opts.assets?.tileHover ??
+      opts.sounds?.tileHover,
+    diamondRevealed:
+      opts.diamondRevealedSoundPath ??
+      opts.assets?.diamondRevealedSound ??
+      opts.assets?.diamondRevealed ??
+      opts.sounds?.diamondRevealed,
+    bombRevealed:
+      opts.bombRevealedSoundPath ??
+      opts.assets?.bombRevealedSound ??
+      opts.assets?.bombRevealed ??
+      opts.sounds?.bombRevealed,
+    win:
+      opts.winSoundPath ??
+      opts.assets?.winSound ??
+      opts.assets?.win ??
+      opts.sounds?.win,
+    gameStart:
+      opts.gameStartSoundPath ??
+      opts.assets?.gameStartSound ??
+      opts.assets?.gameStart ??
+      opts.sounds?.gameStart,
+  };
+
   // Visuals
-  const diamondTexturePath = opts.dimaondTexturePath ?? diamondTextureUrl;
-  const bombTexturePath = opts.bombTexturePath ?? bombTextureUrl;
+  const diamondTexturePath = resolveAssetPath({
+    assetBaseUrl,
+    override: textureOverrides.diamond,
+    fallback: diamondTextureUrl,
+    relativePath: "assets/sprites/Diamond.png",
+  });
+  const bombTexturePath = resolveAssetPath({
+    assetBaseUrl,
+    override: textureOverrides.bomb,
+    fallback: bombTextureUrl,
+    relativePath: "assets/sprites/Bomb.png",
+  });
   const iconSizePercentage = opts.iconSizePercentage ?? 0.7;
   const iconRevealedSizeOpacity = opts.iconRevealedSizeOpacity ?? 0.4;
   const iconRevealedSizeFactor = opts.iconRevealedSizeFactor ?? 0.85;
@@ -135,7 +219,12 @@ export async function createGame(mount, opts = {}) {
 
   /* Bomb Explosion spritesheet */
   const explosionSheetEnabled = opts.explosionSheetEnabled ?? true;
-  const explosionSheetPath = opts.explosionSheetPath ?? explosionSheetUrl;
+  const explosionSheetPath = resolveAssetPath({
+    assetBaseUrl,
+    override: textureOverrides.explosionSheet,
+    fallback: explosionSheetUrl,
+    relativePath: "assets/sprites/Explosion_Spritesheet.png",
+  });
   const explosionSheetCols = opts.explosionSheetCols ?? 7;
   const explosionSheetRows = opts.explosionSheetRows ?? 3;
   const explosionSheetFps = opts.explosionSheetFps ?? 24;
@@ -143,15 +232,48 @@ export async function createGame(mount, opts = {}) {
   const explosionSheetOpacity = opts.explosionSheetOpacity ?? 0.75;
 
   /* Sound effects */
-  const tileTapDownSoundPath = opts.tileTapDownSoundPath ?? tileTapDownSoundUrl;
-  const tileFlipSoundPath = opts.tileFlipSoundPath ?? tileFlipSoundUrl;
-  const tileHoverSoundPath = opts.tileHoverSoundPath ?? tileHoverSoundUrl;
-  const diamondRevealedSoundPath =
-    opts.diamondRevealedSoundPath ?? diamondRevealedSoundUrl;
-  const bombRevealedSoundPath =
-    opts.bombRevealedSoundPath ?? bombRevealedSoundUrl;
-  const winSoundPath = opts.winSoundPath ?? winSoundUrl;
-  const gameStartSoundPath = opts.gameStartSoundPath ?? gameStartSoundUrl;
+  const tileTapDownSoundPath = resolveAssetPath({
+    assetBaseUrl,
+    override: soundOverrides.tileTapDown,
+    fallback: tileTapDownSoundUrl,
+    relativePath: "assets/sounds/TileTapDown.wav",
+  });
+  const tileFlipSoundPath = resolveAssetPath({
+    assetBaseUrl,
+    override: soundOverrides.tileFlip,
+    fallback: tileFlipSoundUrl,
+    relativePath: "assets/sounds/TileFlip.wav",
+  });
+  const tileHoverSoundPath = resolveAssetPath({
+    assetBaseUrl,
+    override: soundOverrides.tileHover,
+    fallback: tileHoverSoundUrl,
+    relativePath: "assets/sounds/TileHover.wav",
+  });
+  const diamondRevealedSoundPath = resolveAssetPath({
+    assetBaseUrl,
+    override: soundOverrides.diamondRevealed,
+    fallback: diamondRevealedSoundUrl,
+    relativePath: "assets/sounds/DiamondRevealed.wav",
+  });
+  const bombRevealedSoundPath = resolveAssetPath({
+    assetBaseUrl,
+    override: soundOverrides.bombRevealed,
+    fallback: bombRevealedSoundUrl,
+    relativePath: "assets/sounds/BombRevealed.wav",
+  });
+  const winSoundPath = resolveAssetPath({
+    assetBaseUrl,
+    override: soundOverrides.win,
+    fallback: winSoundUrl,
+    relativePath: "assets/sounds/Win.wav",
+  });
+  const gameStartSoundPath = resolveAssetPath({
+    assetBaseUrl,
+    override: soundOverrides.gameStart,
+    fallback: gameStartSoundUrl,
+    relativePath: "assets/sounds/GameStart.wav",
+  });
   const diamondRevealPitchMin = Number(opts.diamondRevealPitchMin ?? 1.0);
   const diamondRevealPitchMax = Number(opts.diamondRevealPitchMax ?? 1.5);
 
@@ -180,6 +302,9 @@ export async function createGame(mount, opts = {}) {
     win: "mines.win",
     gameStart: "mines.gameStart",
   };
+
+  const loadedAssetUrls = new Set();
+  const loadedSoundAliases = new Set();
 
   /* Win pop-up */
   const winPopupShowDuration = opts.winPopupShowDuration ?? 260;
@@ -265,6 +390,7 @@ export async function createGame(mount, opts = {}) {
   let totalSafe = GRID * GRID - mines;
   let waitingForChoice = false;
   let selectedTile = null;
+  let destroyed = false;
 
   // API callbacks
   const onWin = opts.onWin ?? (() => {});
@@ -305,10 +431,45 @@ export async function createGame(mount, opts = {}) {
   }
 
   function destroy() {
+    if (destroyed) return;
+    destroyed = true;
     try {
       ro.disconnect();
     } catch {}
     cleanupExplosionSprites();
+    for (const tile of tiles) {
+      tile.removeAllListeners?.();
+    }
+    tiles = [];
+
+    for (const alias of loadedSoundAliases) {
+      try {
+        sound.stop?.(alias);
+        sound.remove?.(alias);
+      } catch {}
+    }
+    loadedSoundAliases.clear();
+
+    for (const url of loadedAssetUrls) {
+      try {
+        Assets.unload(url);
+      } catch {}
+    }
+    loadedAssetUrls.clear();
+
+    if (explosionFrames) {
+      for (const frame of explosionFrames) {
+        frame.destroy(true);
+      }
+      explosionFrames = null;
+    }
+
+    diamondTexture = null;
+    bombTexture = null;
+
+    try {
+      app.ticker?.stop?.();
+    } catch {}
     app.destroy(true);
     if (app.canvas?.parentNode === root) root.removeChild(app.canvas);
   }
@@ -523,21 +684,24 @@ export async function createGame(mount, opts = {}) {
   }
 
   async function loadDiamondTexture() {
-    if (diamondTexture) return;
+    if (diamondTexture || !diamondTexturePath) return;
 
     diamondTexture = await Assets.load(diamondTexturePath);
+    loadedAssetUrls.add(diamondTexturePath);
   }
 
   async function loadBombTexture() {
-    if (bombTexture) return;
+    if (bombTexture || !bombTexturePath) return;
 
     bombTexture = await Assets.load(bombTexturePath);
+    loadedAssetUrls.add(bombTexturePath);
   }
 
   async function loadExplosionFrames() {
-    if (explosionFrames) return;
+    if (explosionFrames || !explosionSheetPath) return;
 
     const baseTex = await Assets.load(explosionSheetPath);
+    loadedAssetUrls.add(explosionSheetPath);
 
     const sheetW = baseTex.width;
     const sheetH = baseTex.height;
@@ -593,6 +757,7 @@ export async function createGame(mount, opts = {}) {
         loaded: resolve,
         error: resolve,
       });
+      loadedSoundAliases.add(alias);
     });
   }
 
