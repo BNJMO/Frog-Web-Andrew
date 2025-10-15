@@ -1,24 +1,21 @@
-import {Component, OnInit} from '@angular/core';
-import {ActivatedRoute, RouterOutlet} from '@angular/router';
-import {environment} from '../environments/environment';
-import {GameService, UserData} from "./core";
-import {TranslateModule, TranslateService} from "@ngx-translate/core";
-import {CommonModule} from "@angular/common";
-import {Utils} from "./shared";
-import {GameDesktopComponent} from "./game/desktop/game.desktop.component";
-import { GameMobileComponent } from "./game/mobile/game.mobile.component";
+import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
+import { environment } from '../environments/environment';
+import { GameService, UserData } from "./core";
+import { TranslateModule, TranslateService } from "@ngx-translate/core";
+import { CommonModule } from "@angular/common";
+import { MinesGameComponent } from "./mines-game/mines-game.component";
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet, TranslateModule, CommonModule, GameDesktopComponent, GameMobileComponent],
+  imports: [TranslateModule, CommonModule, MinesGameComponent],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss'
 })
 export class AppComponent implements OnInit {
-  title = 'roulette';
+  title = 'mines';
   sessionToken = '';
-  isMobile = new Utils().isMobile();
 
   constructor(private userData: UserData, public gameService: GameService,
               private activatedRoute: ActivatedRoute, private translate: TranslateService) {

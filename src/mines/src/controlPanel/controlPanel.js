@@ -1,7 +1,8 @@
 import { Stepper } from "../stepper/stepper.js";
-import bitcoinIconUrl from "../../assets/sprites/BitCoin.png";
-import infinityIconUrl from "../../assets/sprites/Infinity.png";
-import percentageIconUrl from "../../assets/sprites/Percentage.png";
+
+const bitcoinIconUrl = "assets/mines/sprites/BitCoin.png";
+const infinityIconUrl = "assets/mines/sprites/Infinity.png";
+const percentageIconUrl = "assets/mines/sprites/Percentage.png";
 
 function resolveMount(mount) {
   if (!mount) {
