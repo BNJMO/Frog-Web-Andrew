@@ -25,27 +25,28 @@ const winSoundUrl = "assets/mines/sounds/Win.wav";
 const gameStartSoundUrl = "assets/mines/sounds/GameStart.wav";
 
 const PALETTE = {
-  appBg: 0x020401, // page/canvas background
-  tileBase: 0x363636, // main tile face
-  tileInset: 0x363636, // inner inset
-  tileStroke: 0x232323, // subtle outline
+  appBg: 0x091B26, // page/canvas background
+  tileBase: 0x2B4756, // main tile face
+  tileInset: 0x2B4756, // inner inset
+  tileStroke: 0x080E11, // subtle outline
   tileStrokeFlipped: 0x0f0f0f, // subtle outline
-  tileElevationBase: 0x2f2f2f, // visible lip beneath tile face
-  tileElevationShadow: 0x000000, // soft drop shadow
-  hover: 0x666666, // hover
+  tileElevationBase: 0x1B2931, // visible lip beneath tile face
+  tileElevationShadow: 0x091B26, // soft drop shadow
+  hover: 0x528AA5, // hover
   pressedTint: 0x7a7a7a,
   defaultTint: 0xffffff,
-  safeA: 0x141414, // outer
-  safeAUnrevealed: 0x141414,
-  safeB: 0x141414, // inner
-  safeBUnrevealed: 0x141414,
-  bombA: 0x141414,
-  bombAUnrevealed: 0x141414,
-  bombB: 0x141414,
-  bombBUnrevealed: 0x141414,
+  safeA: 0x0F181E, // outer
+  safeAUnrevealed: 0x0F181E,
+  safeB: 0x0F181E, // inner
+  safeBUnrevealed: 0x0F181E,
+  bombA: 0x0F181E,
+  bombAUnrevealed: 0x0F181E,
+  bombB: 0x0F181E,
+  bombBUnrevealed: 0x0F181E,
   winPopupBorder: 0xeaff00,
-  winPopupBackground: 0x0f0f0f,
+  winPopupBackground: 0x091B26,
   winPopupMultiplierText: 0xeaff00,
+  winPopupSeparationLine: 0x1B2931,
 };
 
 function tween(app, { duration = 300, update, complete, ease = (t) => t }) {
@@ -394,7 +395,7 @@ export async function createGame(mount, opts = {}) {
         centerLineWidth,
         centerLineThickness
       )
-      .fill(0x323232);
+      .fill(PALETTE.winPopupSeparationLine);
 
     const multiplierText = new Text({
       text: "1.00×",
@@ -866,6 +867,7 @@ export async function createGame(mount, opts = {}) {
     t.col = col;
     t.revealed = false;
     t._animating = false;
+    t._layoutScale = 1;
 
     t._wrap = flipWrap;
     t._card = card;
@@ -1040,7 +1042,8 @@ export async function createGame(mount, opts = {}) {
       w.skew.set(0, 0);
       w.rotation = 0;
 
-      t.scale?.set(1, 1);
+      const layoutScale = t._layoutScale ?? 1;
+      t.scale?.set(layoutScale, layoutScale);
       t.skew?.set(0, 0);
       t.rotation = 0;
 
@@ -1270,21 +1273,17 @@ export async function createGame(mount, opts = {}) {
     revealedSafe = 0;
     totalSafe = GRID * GRID - mines;
 
-    const { tileSize, gap, contentSize } = layoutSizes();
-    const startX = -contentSize / 2;
-    const startY = -contentSize / 2;
+    const layout = layoutSizes();
 
     for (let r = 0; r < GRID; r++) {
       for (let c = 0; c < GRID; c++) {
-        const tile = createTile(r, c, tileSize);
-        tile.x = startX + c * (tileSize + gap);
-        tile.y = startY + r * (tileSize + gap);
-        tile._baseX = tile.x;
-        tile._baseY = tile.y;
+        const tile = createTile(r, c, layout.tileSize);
         board.addChild(tile);
         tiles.push(tile);
       }
     }
+
+    layoutBoard(layout);
 
     if (shouldPlayStartSound) {
       playSoundEffect("gameStart");
@@ -1294,13 +1293,37 @@ export async function createGame(mount, opts = {}) {
 
   function layoutSizes() {
     const canvasSize = Math.min(app.renderer.width, app.renderer.height);
-    const topSpace = 32;
-    const boardSpace = Math.max(40, canvasSize - topSpace - 10);
+    const topSpace = 16;
+    const boardSpace = Math.max(40, canvasSize - topSpace - 5);
     const gap = Math.max(1, Math.floor(boardSpace * gapBetweenTiles));
     const totalGaps = gap * (GRID - 1);
     const tileSize = Math.floor((boardSpace - totalGaps) / GRID);
     const contentSize = tileSize * GRID + totalGaps;
     return { tileSize, gap, contentSize };
+  }
+
+  function layoutBoard(layout = layoutSizes()) {
+    if (!tiles.length) return;
+
+    const { tileSize, gap, contentSize } = layout;
+    const startX = -contentSize / 2;
+    const startY = -contentSize / 2;
+
+    for (const tile of tiles) {
+      const targetSize = tileSize;
+      const baseSize = tile._tileSize || targetSize || 1;
+      const scale = baseSize === 0 ? 1 : targetSize / baseSize;
+
+      tile.scale?.set?.(scale, scale);
+      tile._layoutScale = scale;
+
+      const x = startX + tile.col * (targetSize + gap);
+      const y = startY + tile.row * (targetSize + gap);
+
+      tile.position.set(x, y);
+      tile._baseX = x;
+      tile._baseY = y;
+    }
   }
 
   function centerBoard() {
@@ -1315,7 +1338,11 @@ export async function createGame(mount, opts = {}) {
 
     const size = Math.floor(Math.min(cw, ch));
     app.renderer.resize(size, size);
-    buildBoard();
+    if (!tiles.length) {
+      buildBoard();
+    } else {
+      layoutBoard();
+    }
     centerBoard();
     positionWinPopup();
   }

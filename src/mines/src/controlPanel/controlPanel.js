@@ -50,6 +50,7 @@ export class ControlPanel extends EventTarget {
     this.betButtonState = "clickable";
     this.randomPickButtonState = "clickable";
     this.minesSelectState = "clickable";
+    this.autoStartButtonState = "non-clickable";
 
     const totalTilesOption = Number(this.options.totalTiles);
     const normalizedTotalTiles =
@@ -320,12 +321,11 @@ export class ControlPanel extends EventTarget {
     this.autoNumberOfBetsField.appendChild(this.autoNumberOfBetsStepper.element);
 
     this.autoAdvancedHeader = document.createElement("div");
-    this.autoAdvancedHeader.className = "control-section-divider";
+    this.autoAdvancedHeader.className = "auto-advanced-header";
     this.autoSection.appendChild(this.autoAdvancedHeader);
 
-    this.autoAdvancedLabel = document.createElement("span");
-    this.autoAdvancedLabel.className = "control-section-divider-label";
-    this.autoAdvancedLabel.textContent = "Advanced";
+    this.autoAdvancedLabel = this.createSectionLabel("Advanced");
+    this.autoAdvancedLabel.classList.add("auto-advanced-label");
     this.autoAdvancedHeader.appendChild(this.autoAdvancedLabel);
 
     this.autoAdvancedToggle = this.createSwitchButton({
@@ -382,6 +382,8 @@ export class ControlPanel extends EventTarget {
       "control-bet-btn control-start-autobet-btn";
     this.autoStartButton.textContent = "Start Autobet";
     this.autoSection.appendChild(this.autoStartButton);
+
+    this.setAutoStartButtonState(this.autoStartButtonState);
 
     this.isAdvancedEnabled = false;
     this.onWinMode = "reset";
@@ -450,7 +452,7 @@ export class ControlPanel extends EventTarget {
     const icon = document.createElement("img");
     icon.src = percentageIconUrl;
     icon.alt = "";
-    icon.className = "control-bet-input-icon";
+    icon.className = "control-bet-input-icon auto-percentage-icon";
     field.appendChild(icon);
 
     if (key === "win") {
@@ -866,6 +868,18 @@ export class ControlPanel extends EventTarget {
     const isClickable = normalized === "clickable";
     this.randomPickButton.disabled = !isClickable;
     this.randomPickButton.classList.toggle("is-non-clickable", !isClickable);
+  }
+
+  setAutoStartButtonState(state) {
+    if (!this.autoStartButton) return;
+    const normalized =
+      state === "clickable" || state === true || state === "enabled"
+        ? "clickable"
+        : "non-clickable";
+    this.autoStartButtonState = normalized;
+    const isClickable = normalized === "clickable";
+    this.autoStartButton.disabled = !isClickable;
+    this.autoStartButton.classList.toggle("is-non-clickable", !isClickable);
   }
 
   setMinesSelectState(state) {

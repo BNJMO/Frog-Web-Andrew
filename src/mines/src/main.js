@@ -224,7 +224,7 @@ function createDefaultOptions() {
   return {
     // Window visuals
     size: 600,
-    backgroundColor: "#0C0B0F",
+    backgroundColor: "#091B26",
     fontFamily: "Inter, system-ui, -apple-system, Segoe UI, Arial",
 
     // Game setup
