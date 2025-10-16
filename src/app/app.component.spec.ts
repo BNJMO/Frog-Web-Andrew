@@ -14,16 +14,16 @@ describe('AppComponent', () => {
     expect(app).toBeTruthy();
   });
 
-  it(`should have the 'RainbowWheel' title`, () => {
+  it(`should have the 'mines' title`, () => {
     const fixture = TestBed.createComponent(AppComponent);
     const app = fixture.componentInstance;
-    expect(app.title).toEqual('RainbowWheel');
+    expect(app.title).toEqual('mines');
   });
 
-  it('should render title', () => {
+  it('should render the mines game component', () => {
     const fixture = TestBed.createComponent(AppComponent);
     fixture.detectChanges();
     const compiled = fixture.nativeElement as HTMLElement;
-    expect(compiled.querySelector('h1')?.textContent).toContain('Hello, RainbowWheel');
+    expect(compiled.querySelector('app-mines-game')).toBeTruthy();
   });
 });
